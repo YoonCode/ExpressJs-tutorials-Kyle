@@ -1,23 +1,33 @@
 const express = require('express')
 const router = express.Router()
 
+router.use(logger)
+
 router.get('/', (req, res) => {
-  res.send('User List')
+  console.log(req.query.name)
+  res.send(`User List : Hi, this is ${req.query.name}'s homepage!`)
 })
 
 router.get('/new', (req, res) => {
-  res.send('User New Form')
+  res.render('users/new', { firstName: 'Test' })
 })
 
 router.post('/', (req, res) => {
-  res.send('Create User')
+  const isValid = true
+  if (isValid) {
+    users.push({ firstName: req.body.firstName })
+    res.redirect(`/users/${users.length - 1}`)
+  } else {
+    console.log('Error')
+    res.redirect('users/new', { firstName: req.body.firstName })
+  }
 })
 
 router
   .route('/:id')
   .get((req, res) => {
-    res.send(`Create User with ID ${req.params.id}`)
     console.log(req.user)
+    res.send(`Create User with ID ${req.params.id}`)
   })
   .put((req, res) => {
     res.send(`Update User with ID ${req.params.id}`)
@@ -31,5 +41,10 @@ router.param('id', (req, res, next, id) => {
   req.user = users[id]
   next()
 })
+
+function logger(req, res, next) {
+  console.log(req.originalUrl)
+  next()
+}
 
 module.exports = router
