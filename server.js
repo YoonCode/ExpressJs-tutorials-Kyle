@@ -1,13 +1,21 @@
 const express = require('express')
 const app = express()
 
-app.use(express.static('public'))
-app.use(express.urlencoded({ extended: true }))
+app.use(logger)
 
-app.set('view engine', 'ejs')
+app.get('/', (req, res) => {
+  console.log('Home Page')
+  res.send('Home Page')
+})
 
-const userRouter = require('./routes/users')
+app.get('/users', (req, res) => {
+  console.log('User Page')
+  res.send('User Page')
+})
 
-app.use('/users', userRouter)
+function logger(req, res, next) {
+  console.log('Log')
+  next()
+}
 
 app.listen(3000)
