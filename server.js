@@ -8,7 +8,7 @@ app.get('/', (req, res) => {
   res.send('Home Page')
 })
 
-app.get('/users', (req, res) => {
+app.get('/users', auth, (req, res) => {
   console.log('User Page')
   res.send('User Page')
 })
@@ -16,6 +16,14 @@ app.get('/users', (req, res) => {
 function logger(req, res, next) {
   console.log('Log')
   next()
+}
+
+function auth(req, res, next) {
+  if (req.query.admin === 'true') {
+    next()
+  } else {
+    res.send('No auth')
+  }
 }
 
 app.listen(3000)
